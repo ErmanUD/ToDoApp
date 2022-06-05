@@ -49,7 +49,7 @@ class ToDoListViewController: UITableViewController {
         itemArray.remove(at: indexPath.row) // removing the cureent item from the itemArray
         // contextItem is temporary area. It must be saved after the change.
         // contextItem.delete must be called first. then itemArray.remove. The order matters.
-        */
+         */
          
         itemArray[indexPath.row].check = !itemArray[indexPath.row].check
         
