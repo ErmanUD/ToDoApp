@@ -43,13 +43,6 @@ class ToDoListViewController: UITableViewController {
     // MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        /*
-        contextItem.delete(itemArray[indexPath.row]) // removing the data from the permanent store
-        itemArray.remove(at: indexPath.row) // removing the cureent item from the itemArray
-        // contextItem is temporary area. It must be saved after the change.
-        // contextItem.delete must be called first. then itemArray.remove. The order matters.
-         */
          
         itemArray[indexPath.row].check = !itemArray[indexPath.row].check
         
@@ -120,6 +113,28 @@ class ToDoListViewController: UITableViewController {
         
         tableView.reloadData()
     }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        
+        
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, indexPath in
+            self.contextItem.delete(self.itemArray[indexPath.row])  // removing the item from the permanent store
+            self.itemArray.remove(at: indexPath.row)                // removing the cureent item from the itemArray
+
+            // contextItem is temporary area. It must be saved after the change.
+            // contextItem.delete must be called first. then itemArray.remove. The order matters.
+            
+            self.saveItems()
+        }
+        
+        return [deleteAction]
+    }
+    
 }
 
 // MARK: - SearchBar methods

@@ -31,22 +31,10 @@ class CategoryViewController: UITableViewController {
     // MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        /*
-        contextCategory.delete(categoriesArray[indexPath.row]) // removing the data from the permanent store
-        categoriesArray.remove(at: indexPath.row) // removing the cureent item from the itemArray
-        // contextItem is temporary area. It must be saved after the change.
-        // contextItem.delete must be called first. then itemArray.remove. The order matters.
-        */
-        
-//        saveCategories()
-//        tableView.deselectRow(at: indexPath, animated: true)
-
-        
+                
         performSegue(withIdentifier: "goToItems", sender: self)
                 
         tableView.deselectRow(at: indexPath, animated: true)
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -83,7 +71,7 @@ class CategoryViewController: UITableViewController {
     }
     
 
-    // MARK: - Add New Categories
+    // MARK: - Edit Categories
     
     @IBAction func addButonnTapped(_ sender: UIBarButtonItem) {
         
@@ -110,5 +98,4 @@ class CategoryViewController: UITableViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-    
 }
