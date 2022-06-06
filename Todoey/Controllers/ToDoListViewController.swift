@@ -1,9 +1,11 @@
 import UIKit
 import CoreData
+import ChameleonFramework
 
 class ToDoListViewController: UITableViewController {
 
     var itemArray = [Item]() //itemArray is used to load up the table view data source
+    @IBOutlet weak var searchBarOutlet: UISearchBar!
     
     var selectedCategory: Categories? {
         didSet{
@@ -16,7 +18,24 @@ class ToDoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.separatorStyle = .none
+        tableView.rowHeight = 60
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let themeColor = UIColor(hexString: (selectedCategory?.colour)!)
+        let themeContrast = ContrastColorOf(themeColor!, returnFlat: true)
+                
+        navigationItem.title = selectedCategory!.name
         
+        navigationController?.navigationBar.backgroundColor = themeColor!
+        navigationController?.navigationBar.tintColor = themeContrast
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: themeContrast]
+        navigationController?.navigationBar.barTintColor = themeColor
+        navigationItem.rightBarButtonItem?.tintColor = themeContrast
+                
+        searchBarOutlet.barTintColor = themeColor!
+
     }
     
     // MARK: - Tableview Datasource Methods
@@ -28,13 +47,20 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
-        
         let currentItem = itemArray[indexPath.row]
+        let percentage = CGFloat(indexPath.row)/CGFloat(itemArray.count)
+        let colourString = selectedCategory?.colour
+        let categoryColour = UIColor(hexString: colourString!)!
         
         cell.textLabel?.text = currentItem.title
-        
-//        currentItem.check ? (cell.accessoryType = .checkmark) : (cell.accessoryType = .none)
         cell.accessoryType = currentItem.check ? .checkmark : .none
+        
+        if let colour = categoryColour.darken(byPercentage: percentage) {
+            cell.backgroundColor = colour
+            cell.textLabel?.textColor = ContrastColorOf(colour, returnFlat: true)
+
+            
+        }
         
         return cell
     }

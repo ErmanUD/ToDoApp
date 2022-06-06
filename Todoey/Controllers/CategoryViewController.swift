@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import ChameleonFramework
 
 class CategoryViewController: UITableViewController {
     
@@ -10,8 +11,18 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
         
         loadCategories()
+        
+        tableView.separatorStyle = .none
+        tableView.rowHeight = 60
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        navigationController?.navigationBar.backgroundColor = UIColor(hexString: "1D9BF6")
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+
+    }
     
     // MARK: - TableView Datasource Methods
     
@@ -22,8 +33,13 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) // prototype cell identifier
+        let currentCategory = categoriesArray[indexPath.row]
+        let themeColor = UIColor(hexString: currentCategory.colour ?? "1D9BF6")
         
-        cell.textLabel?.text = categoriesArray[indexPath.row].name
+        
+        cell.textLabel?.text = currentCategory.name
+        cell.backgroundColor = themeColor
+        cell.textLabel?.textColor = ContrastColorOf(themeColor!, returnFlat: true)
         
         return cell
     }
@@ -84,6 +100,7 @@ class CategoryViewController: UITableViewController {
             
             let newCategory = Categories(context: self.contextCategory)
             newCategory.name = categoryAddTextField.text!
+            newCategory.colour = RandomFlatColor().hexValue()
             
             self.categoriesArray.append(newCategory)
             
